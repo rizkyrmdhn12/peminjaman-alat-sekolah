@@ -1,0 +1,20 @@
+# Front controller tunggal: seluruh request diarahkan ke index.php,
+# kecuali file yang benar-benar ada (assets, dsb).
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]
+
+# Cegah akses langsung ke folder sumber (app/, config/, database/, storage/)
+<IfModule mod_rewrite.c>
+    RewriteRule ^(app|config|database|storage)/ - [F,L]
+</IfModule>
+
+# Header keamanan dasar
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set Referrer-Policy "same-origin"
+</IfModule>
+
+Options -Indexes
